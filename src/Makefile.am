@@ -8,7 +8,8 @@ TRANSLATE =
 
 lrelease_FILES = 
 
-libqt4json_la_SOURCES =	libqt4json.cpp
+libqt4json_la_SOURCES = 	libqt4json.cpp \
+							libqt4json.h
 						
 libqt4json_la_LIBADD = $(QT4_LIBS) 
 
