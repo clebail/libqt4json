@@ -10,10 +10,10 @@ namespace libqt4json {
 	//------------------------------------------------------------------------------
 	class CJson {
 		public:
-			QString toString(QObject *object);
+			QString toString(QVariant variant);
 			QVariant fromString(QString json) { return QVariant(); }
 		private:
-			QString variantToString(QVariant variant);
+			QString variantToString(QVariant variant, bool& simpleType);
 			QString objectStarToString(QVariant variant);
 			QString listToString(QVariant variant);
 			QString mapToString(QVariant variant);

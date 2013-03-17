@@ -1,30 +1,28 @@
 //------------------------------------------------------------------------------
 #include <QMetaProperty>
+#include <QtDebug>
 #include "libqt4json.h"
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
-	QString CJson::toString(QObject *object) {
-		QString json="{";
-		QString s="";
-
-		const QMetaObject *metaObject=object->metaObject();
-		for(int i=metaObject->propertyOffset();i<metaObject->propertyCount();i++) {
-			QMetaProperty property=metaObject->property(i);
-
-			json+=s+"\""+property.name()+"\": "+variantToString(property.read(object));
-			s=", ";
+	QString CJson::toString(QVariant variant) {
+		bool simpleType;
+		QString json=variantToString(variant, simpleType);
+		if(simpleType) {
+			json="["+json+"]";
 		}
-		json+="}";
-		
 		return json;
 	}
 	//------------------------------------------------------------------------------
-	QString CJson::variantToString(QVariant variant) {
+	QString CJson::variantToString(QVariant variant, bool& simpleType) {
+		simpleType=false;
+		qDebug() << variant.type();
+		
 		switch(variant.type()) {
 			case QVariant::Double:
 			case QVariant::Int:
 			case QVariant::LongLong:
+				simpleType=true;
 				return variant.toString();
 			case QMetaType::QObjectStar:
 				return objectStarToString(variant);
@@ -33,6 +31,7 @@ namespace libqt4json {
 			case QVariant::Map:
 				return mapToString(variant);
 			default:
+				simpleType=true;
 				return "\""+protect(variant.toString())+"\"";
 		}
 	}
@@ -40,11 +39,26 @@ namespace libqt4json {
 	QString CJson::objectStarToString(QVariant variant) {
 		QObject *object=qvariant_cast<QObject *>(variant);
 		
+		qDebug() << "Object";
+		
 		if(object != 0) {
-			return toString(object);
+			QString json="{";
+			QString s="";
+			bool simpleType;
+
+			const QMetaObject *metaObject=object->metaObject();
+			for(int i=metaObject->propertyOffset();i<metaObject->propertyCount();i++) {
+				QMetaProperty property=metaObject->property(i);
+
+				json+=s+"\""+property.name()+"\": "+variantToString(property.read(object), simpleType);
+				s=", ";
+			}
+			json+="}";
+			
+			return json;
 		}
 		
-		return "";
+		return "null";
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::listToString(QVariant variant) {
@@ -52,9 +66,13 @@ namespace libqt4json {
 		int i;
 		QString json="[";
 		QString s="";
+		bool simpleType;
+		
+		qDebug() << "List" << l.size();
 		
 		for(i=0;i<l.size();i++) {
-			json+=s+variantToString(l.at(i));
+			qDebug() << l.at(i);
+			json+=s+variantToString(l.at(i), simpleType);
 			s=", ";
 		}
 		
@@ -68,10 +86,13 @@ namespace libqt4json {
 		QMapIterator<QString, QVariant> i(m);
 		QString json="{";
 		QString s="";
+		bool simpleType;
+		
+		qDebug() << "Map";
 		
 		while (i.hasNext()) {
 			i.next();
-			json+=s+"\""+i.key()+"\": "+variantToString(i.value());
+			json+=s+"\""+i.key()+"\": "+variantToString(i.value(), simpleType);
 			s=", ";
 		}
 		

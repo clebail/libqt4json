@@ -14,7 +14,7 @@ AC_PROG_LIBTOOL
 
 AC_CONFIG_MACRO_DIR([m4])
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile src/example/Makefile])
 
 AC_CHECK_PROG(LRELEASE, lrelease-qt4, lrelease-qt4)
 if test x$LRELEASE = x; then
