@@ -9,12 +9,21 @@ TRANSLATE =
 lrelease_FILES = 
 
 libqt4json_la_SOURCES = 	libqt4json.cpp \
-							libqt4json.h
+							libqt4json.h \
+							libqt4json.y.c \
+							libqt4json.y.h \
+							libqt4json.l.c
 						
 libqt4json_la_LIBADD = $(QT4_LIBS) 
 
 %.qm: %.ts
 	$(LRELEASE) $< -qm $@
+
+libqt4json.l.c: libqt4json.l
+	$(FLEX) -o $@ $<
+
+libqt4json.y.c: libqt4json.y
+	$(BISON) -o $@ -d $<
 
 $(libqt4json_la_OBJECTS): $(lrelease_FILES)
 

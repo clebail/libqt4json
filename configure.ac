@@ -24,6 +24,16 @@ if test x$LRELEASE = x; then
 	fi
 fi
 
+AC_CHECK_PROG(FLEX, flex, flex)
+if test x$FLEX = x ; then
+	AC_MSG_ERROR([flex not found! Make sure you have flex installed!])
+fi
+
+AC_CHECK_PROG(BISON, bison, bison)
+if test x$BISON = x ; then
+	AC_MSG_ERROR([bison not found! Make sure you have bison installed!])
+fi
+
 PKG_CHECK_MODULES([QT4], [QtCore])
 
 AC_OUTPUT
