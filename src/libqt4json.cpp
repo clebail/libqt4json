@@ -5,6 +5,10 @@
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
+	extern "C" {
+		void scan_string(char *input);
+	}// extern "C"
+	//------------------------------------------------------------------------------
 	QString CJson::toString(QVariant variant) {
 		bool simpleType;
 		QString json=variantToString(variant, simpleType);
@@ -12,6 +16,10 @@ namespace libqt4json {
 			json="["+json+"]";
 		}
 		return json;
+	}
+	//------------------------------------------------------------------------------
+	QVariant CJson::fromString(QString json) {
+		scan_string(json.toUtf8().data());
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::variantToString(QVariant variant, bool& simpleType) {

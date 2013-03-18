@@ -20,6 +20,9 @@ int main(int argc, char **argv) {
 	
 	qDebug() << json->toString(QVariant(vl));
 	
+	qDebug() << "fromString";
+	json->fromString("[10, 56]");
+	
 	delete json;
 	
 	return 0;

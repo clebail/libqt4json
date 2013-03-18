@@ -2,7 +2,7 @@
 #include <stdio.h>
 %}
 
-%token NUMBER
+%token NUMBER STRING
 %token LISTO LISTF
 %token MAPO MAPF
 %token COMMA COLON
@@ -19,20 +19,22 @@ LIST	:	LISTO SUITE LISTF	{ printf("suite\n"); }
 MAP		:	MAPO PAIR MAPF		{ printf("pair\n"); }
 		;
 SUITE	:	NUMBER				{ printf("suite number\n"); }
+		|	STRING				{ printf("suite string\n"); }
 		|	MAP					{ printf("suite map\n"); }
 		|	LIST				{ printf("suite list\n"); }
 		|	SUITE COMMA SUITE	{ printf("next suite\n"); }
 		;
-PAIR	:	NUMBER COLON NUMBER	{ printf("pair number\n"); }
-		|	NUMBER COLON LIST	{ printf("pair list\n"); }
-		|	NUMBER COLON MAP	{ printf("pair map\n"); }
+PAIR	:	STRING COLON NUMBER	{ printf("pair number\n"); }
+		|	STRING COLON STRING	{ printf("pair string\n"); }
+		|	STRING COLON LIST	{ printf("pair list\n"); }
+		|	STRING COLON MAP	{ printf("pair map\n"); }
 		|	PAIR COMMA PAIR		{ printf("next pair\n"); }
 		;
 %%
 
-int main(void) {
+void scan_string(const char* str) {
+    yy_switch_to_buffer(yy_scan_string(str));
 	yyparse();
-	return 0;
 }
 
 int yywrap(void) {
