@@ -9,11 +9,11 @@ TRANSLATE =
 lrelease_FILES = 
 
 libqt4json_la_SOURCES = 	libqt4json.cpp \
-							libqt4json.h 
+				libqt4json.h 
 	
 nodist_libqt4json_la_SOURCES = 	libqt4json.y.c \
-								libqt4json.y.h \
-								libqt4json.l.c
+				libqt4json.y.h \
+				libqt4json.l.c
 					
 libqt4json_la_LIBADD = $(QT4_LIBS) 
 
@@ -33,6 +33,7 @@ clean-qt-extra:
 	rm -f *.lo
 	rm -f libqt4json.l.c
 	rm -f libqt4json.y.c
+	rm -f libqt4json.y.h
 	
 clean-am: clean-qt-extra
 
