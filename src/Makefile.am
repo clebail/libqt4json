@@ -9,11 +9,12 @@ TRANSLATE =
 lrelease_FILES = 
 
 libqt4json_la_SOURCES = 	libqt4json.cpp \
-							libqt4json.h \
-							libqt4json.y.c \
-							libqt4json.y.h \
-							libqt4json.l.c
-						
+							libqt4json.h 
+	
+nodist_libqt4json_la_SOURCES = 	libqt4json.y.c \
+								libqt4json.y.h \
+								libqt4json.l.c
+					
 libqt4json_la_LIBADD = $(QT4_LIBS) 
 
 %.qm: %.ts
@@ -36,3 +37,5 @@ clean-am: clean-qt-extra
 install-data-hook:
 	
 dist-hook:
+	cp $(srcdir)/libqt4json.l $(distdir); \
+	cp $(srcdir)/libqt4json.y $(distdir);
