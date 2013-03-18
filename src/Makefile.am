@@ -31,6 +31,8 @@ $(libqt4json_la_OBJECTS): $(lrelease_FILES)
 clean-qt-extra:
 	rm -f *.o
 	rm -f *.lo
+	rm -f libqt4json.l.c
+	rm -f libqt4json.y.c
 	
 clean-am: clean-qt-extra
 

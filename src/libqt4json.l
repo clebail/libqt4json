@@ -18,6 +18,9 @@ UNICODECHAR		\\u{HEX_DIGIT}{HEX_DIGIT}{HEX_DIGIT}{HEX_DIGIT}
 CHAR			{UNESCAPEDCHAR}|{ESCAPEDCHAR}|{UNICODECHAR}
 CHARS			{CHAR}+
 DBL_QUOTE		["]
+TRUE			[tT][rR][uU][eE]
+FALSE			[fF][aA][lL][sS][eE]
+NULL			[nN][uU][lL]{2}
 %%
 {NUMBER}	{	sscanf(yytext, "%d", &yylval); 
 				return NUMBER; 
@@ -37,6 +40,12 @@ DBL_QUOTE		["]
 ","			{	return COMMA;
 			}
 ":"			{	return COLON;
+			}
+{TRUE}		{	return TRUEVALUE;
+			}
+{FALSE}		{	return FALSEVALUE;
+			}
+{NULL}		{	return NULLVALUE;
 			}
 {SPACE}		{}
 .			{ 	printf("\nUnkown lexem %s\n", yytext);

@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 	qDebug() << json->toString(QVariant(vl));
 	
 	qDebug() << "fromString";
-	json->fromString("[10, 56]");
+	json->fromString("[35, \"corentin\", {\"day\": 7, \"month\": \"April\", \"year\": 1977}, true, false, null]");
 	
 	delete json;
 	

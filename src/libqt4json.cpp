@@ -47,8 +47,6 @@ namespace libqt4json {
 	QString CJson::objectStarToString(QVariant variant) {
 		QObject *object=qvariant_cast<QObject *>(variant);
 		
-		qDebug() << "Object";
-		
 		if(object != 0) {
 			QString json="{";
 			QString s="";
@@ -76,8 +74,6 @@ namespace libqt4json {
 		QString s="";
 		bool simpleType;
 		
-		qDebug() << "List" << l.size();
-		
 		for(i=0;i<l.size();i++) {
 			qDebug() << l.at(i);
 			json+=s+variantToString(l.at(i), simpleType);
@@ -95,8 +91,6 @@ namespace libqt4json {
 		QString json="{";
 		QString s="";
 		bool simpleType;
-		
-		qDebug() << "Map";
 		
 		while (i.hasNext()) {
 			i.next();
