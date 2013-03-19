@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <string.h>
 #include "libqt4json.y.h"
 %}
 SPACE			[ \t\r\n]
@@ -22,11 +23,15 @@ TRUE			[tT][rR][uU][eE]
 FALSE			[fF][aA][lL][sS][eE]
 NULL			[nN][uU][lL]{2}
 %%
-{NUMBER}	{	sscanf(yytext, "%d", &yylval); 
+{NUMBER}	{	double *d=(double *)malloc(sizeof(double));
+				sscanf(yytext, "%lf", d); 
+				yylval=(int)d;
 				return NUMBER; 
 			}
 {DBL_QUOTE}{DBL_QUOTE}|{DBL_QUOTE}{CHARS}{DBL_QUOTE} {
-				yylval=(int)yytext;
+				char *s=(char *)malloc(strlen(yytext)+1);
+				strcpy(s, yytext);
+				yylval=(int)s;
 				return STRING;
 			}
 "["			{	return LISTO;

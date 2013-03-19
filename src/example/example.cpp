@@ -13,15 +13,14 @@ int main(int argc, char **argv) {
 	vl.append("Corentin");
 	
 	vm.insert("day", 7);
-	vm.insert("month", 4);
+	vm.insert("month", "April");
 	vm.insert("year", 1977);
 	
 	vl.append(QVariant(vm));
 	
-	qDebug() << json->toString(QVariant(vl));
-	
-	qDebug() << "fromString";
-	json->fromString("[35, \"corentin\", {\"day\": 7, \"month\": \"April\", \"year\": 1977}, true, false, null]");
+	QString sJson=json->toString(QVariant(vl));
+	qDebug() << sJson;
+	json->fromString(sJson);
 	
 	delete json;
 	

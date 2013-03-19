@@ -24,7 +24,6 @@ namespace libqt4json {
 	//------------------------------------------------------------------------------
 	QString CJson::variantToString(QVariant variant, bool& simpleType) {
 		simpleType=false;
-		qDebug() << variant.type();
 		
 		switch(variant.type()) {
 			case QVariant::Double:
@@ -39,9 +38,15 @@ namespace libqt4json {
 			case QVariant::Map:
 				return mapToString(variant);
 			default:
-				simpleType=true;
-				return "\""+protect(variant.toString())+"\"";
+				if(variant.canConvert<QString>()) {
+					simpleType=true;
+					return "\""+protect(variant.toString())+"\"";
+				}
 		}
+		
+		qDebug() << QObject::tr("Unable to convert") << variant.type() << QObject::tr("in json");
+		
+		return "null";
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::objectStarToString(QVariant variant) {
@@ -64,6 +69,8 @@ namespace libqt4json {
 			return json;
 		}
 		
+		qDebug() << QObject::tr("Cannot cast") << variant.type() << QObject::tr("as QObject *");
+		
 		return "null";
 	}
 	//------------------------------------------------------------------------------
@@ -75,7 +82,6 @@ namespace libqt4json {
 		bool simpleType;
 		
 		for(i=0;i<l.size();i++) {
-			qDebug() << l.at(i);
 			json+=s+variantToString(l.at(i), simpleType);
 			s=", ";
 		}
