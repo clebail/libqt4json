@@ -1,13 +1,11 @@
 //------------------------------------------------------------------------------
 #include <QMetaProperty>
 #include <QtDebug>
+#include <sstream>
 #include "libqt4json.h"
+#include "CScanner.h"
 //------------------------------------------------------------------------------
 namespace libqt4json {
-	//------------------------------------------------------------------------------
-	extern "C" {
-		void scan_string(char *input);
-	}// extern "C"
 	//------------------------------------------------------------------------------
 	QString CJson::toString(QVariant variant) {
 		bool simpleType;
@@ -19,7 +17,14 @@ namespace libqt4json {
 	}
 	//------------------------------------------------------------------------------
 	QVariant CJson::fromString(QString json) {
-		scan_string(json.toUtf8().data());
+		std::istringstream iss(json.toStdString());
+		CScanner *scanner=new CScanner(&iss);
+		CParser *parser=new CParser(*scanner);
+		if(!parser->parse()) {
+			return QVariant(); //TODO resultat du parse 
+		}
+		
+		return QVaraint();
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::variantToString(QVariant variant, bool& simpleType) {

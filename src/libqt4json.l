@@ -1,8 +1,18 @@
 %{
-#include <stdio.h>
-#include <string.h>
-#include "libqt4json.y.h"
+#include <iostream>
+#include <QVariant>
+#include <QtDebug>
+#include "CScanner.h"
+
+typedef libqt4json::CParser::token token;
+
+using namespace std;
 %}
+
+%option yyclass="CScanner"
+%option noyywrap
+%option c++
+
 SPACE			[ \t\r\n]
 DIGIT1to9		[1-9]
 DIGIT			[0-9]
@@ -12,7 +22,7 @@ FRAC			[.]{DIGITS}
 EXP				{E}{DIGITS}
 E				[eE][+-]?
 HEX_DIGIT		[0-9a-f]
-NUMBER			{INT}|{INT}{FRAC}|{INT}{EXP}|{INT}{FRAC}{EXP}
+DOUBLE			{INT}|{INT}{FRAC}|{INT}{EXP}|{INT}{FRAC}{EXP}
 UNESCAPEDCHAR	[ -!#-\[\]-~]
 ESCAPEDCHAR		\\["\\bfnrt/]
 UNICODECHAR		\\u{HEX_DIGIT}{HEX_DIGIT}{HEX_DIGIT}{HEX_DIGIT}
@@ -23,40 +33,44 @@ TRUE			[tT][rR][uU][eE]
 FALSE			[fF][aA][lL][sS][eE]
 NULL			[nN][uU][lL]{2}
 %%
-{NUMBER}	{	double *d=(double *)malloc(sizeof(double));
-				sscanf(yytext, "%lf", d); 
-				yylval=(int)d;
-				return NUMBER; 
+{INT}		{	int i;
+				sscanf(yytext, "%d", &i);
+				QVariant *v=new QVariant(i);
+				yylval->variant=v;
+				return token::INT;
+			}
+{DOUBLE}	{	double d;
+				sscanf(yytext, "%lf", &d);
+				QVariant *v=new QVariant(d);
+				yylval->variant=v;
+				return token::DOUBLE;
 			}
 {DBL_QUOTE}{DBL_QUOTE}|{DBL_QUOTE}{CHARS}{DBL_QUOTE} {
-				char *s=(char *)malloc(strlen(yytext)+1);
-				strcpy(s, yytext);
-				yylval=(int)s;
-				return STRING;
+				yytext[strlen(yytext)-1]=0;
+				QVariant *v=new QVariant(yytext+1);
+				yylval->variant=v;
+				return token::STRING;
 			}
-"["			{	return LISTO;
+"["			{	return token::LISTO;
 			}
-"]"			{	return LISTF;
+"]"			{	return token::LISTF;
 			}
-"{"			{	return MAPO;
+"{"			{	return token::MAPO;
 			}
-"}"			{	return MAPF;
+"}"			{	return token::MAPF;
 			}
-","			{	return COMMA;
+","			{	return token::COMMA;
 			}
-":"			{	return COLON;
+":"			{	return token::COLON;
 			}
-{TRUE}		{	return TRUEVALUE;
+{TRUE}		{	return token::TRUEVALUE;
 			}
-{FALSE}		{	return FALSEVALUE;
+{FALSE}		{	return token::FALSEVALUE;
 			}
-{NULL}		{	return NULLVALUE;
+{NULL}		{	return token::NULLVALUE;
 			}
 {SPACE}		{}
-.			{ 	printf("\nUnkown lexem %s\n", yytext);
+.			{ 	qDebug() << QObject::tr("Unkown lexem") <<  yytext;
 			}
 %%
-int yyerror(char *msg) {
-	printf("\n%s\n", msg);
-	return 0;
-}
+

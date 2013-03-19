@@ -1,61 +1,101 @@
-%{
-#include <stdio.h>
+%skeleton "lalr1.cc"
 
-typedef enum { edtDouble, edtString } EDataType;
+%defines
+%define namespace "libqt4json"
+%define parser_class_name "CParser"
+%code requires {
+	#include <iostream>
+	#include <QVariant>
+	#include <QList>
+	#include <QtDebug>
+	
+	using namespace std;
+	
+	namespace libqt4json {
+		class CScanner;
+	}
+}
 
-typedef struct _SValue {
-	EDataType dataType;
-	void *data;
-}SValue;
+%lex-param		{ CScanner &scanner }
+%parse-param	{ CScanner &scanner }
 
-typedef struct _SMap {
-	char *key;
-	SValue *value;
-}SMAP;
-%}
-
-%token NUMBER STRING TRUEVALUE FALSEVALUE NULLVALUE
+%code {
+	static QList<QVariant> filo;
+	
+	static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner);
+	static void addListItem(QVariant v);
+	static void addMapItem(QString k, QVariant v);
+}
+%union {
+	QVariant *variant;
+}
+%token <variant> DOUBLE
+%token <variant> INT
+%token <variant> STRING
+%token TRUEVALUE FALSEVALUE NULLVALUE
 %token LISTO LISTF
 %token MAPO MAPF
 %token COMMA COLON
 
 %start AXIOME
 %%
-AXIOME	:	EXP						{ printf("resultat\n"); }
+AXIOME	:	EXP						{ 	filo.takeLast(); }
 		;
-EXP		:	LIST					{ printf("list\n"); }
-		|	MAP						{ printf("map\n"); }
+EXP		:	LIST					{}
+		|	MAP						{}
 		;
-LIST	:	LISTO SUITE LISTF		{ printf("suite\n"); }
+DEBLIST	:	LISTO					{ 	QVariantList vl;
+										filo.append(QVariant(vl));
+									}
 		;
-MAP		:	MAPO PAIR MAPF			{ printf("pair\n"); }
+DEBMAP	:	MAPO					{	QVariantMap vm;
+										filo.append(QVariant(vm));
+									}
 		;
-SUITE	:	NUMBER					{ printf("suite number %lf\n", (double)*((double *)$$)); }
-		|	STRING					{ printf("suite string %s\n", (char *)$$); }
-		|	TRUEVALUE				{ printf("suite true\n"); }
-		|	FALSEVALUE				{ printf("suite false\n"); }
-		|	NULLVALUE				{ printf("suite null\n"); }
-		|	MAP						{ printf("suite map\n"); }
-		|	LIST					{ printf("suite list\n"); }
-		|	SUITE COMMA SUITE		{ printf("next suite\n"); }
+LIST	:	DEBLIST SUITE LISTF		{}
+		;
+MAP		:	DEBMAP PAIR MAPF		{}
+		;
+SUITE	:	INT						{	addListItem(*$1); }
+		|	DOUBLE					{ 	addListItem(*$1); }
+		|	STRING					{ 	addListItem(*$1); }
+		|	TRUEVALUE				{ 	addListItem(QVariant(true)); }
+		|	FALSEVALUE				{ 	addListItem(QVariant(false)); }
+		|	NULLVALUE				{ 	addListItem(QVariant()); }
+		|	MAP						{	addListItem(filo.takeLast()); }
+		|	LIST					{	addListItem(filo.takeLast()); }
+		|	SUITE COMMA SUITE		{}
 		;	
-PAIR	:	STRING COLON NUMBER		{ printf("pair number : %s = %lf\n", (char *)$1, (double)*((double *)$3)); }
-		|	STRING COLON STRING		{ printf("pair string : %s = %s\n", (char *)$1, (char *)$3); }
-		|	STRING COLON TRUEVALUE	{ printf("pair true\n"); }
-		|	STRING COLON FALSEVALUE	{ printf("pair false\n"); }
-		|	STRING COLON NULLVALUE	{ printf("pair null\n"); }
-		|	STRING COLON LIST		{ printf("pair list\n"); }
-		|	STRING COLON MAP		{ printf("pair map\n"); }
-		|	PAIR COMMA PAIR			{ printf("next pair\n"); }
+PAIR	:	STRING COLON INT		{	addMapItem($1->toString(), *$3); }
+		|	STRING COLON DOUBLE		{ 	addMapItem($1->toString(), *$3); }
+		|	STRING COLON STRING		{	addMapItem($1->toString(), *$3); }
+		|	STRING COLON TRUEVALUE	{ 	addMapItem($1->toString(), QVariant(true)); }
+		|	STRING COLON FALSEVALUE	{ 	addMapItem($1->toString(), QVariant(false)); }
+		|	STRING COLON NULLVALUE	{ 	addMapItem($1->toString(), QVariant()); }
+		|	STRING COLON LIST		{	addMapItem($1->toString(), filo.takeLast()); }
+		|	STRING COLON MAP		{	addMapItem($1->toString(), filo.takeLast()); }
+		|	PAIR COMMA PAIR			{}
 		;
 %%
 
-void scan_string(const char* str) {
-    yy_switch_to_buffer(yy_scan_string(str));
-	yyparse();
+void libqt4json::CParser::error(const libqt4json::CParser::location_type &l, const string &errMessage) {
+	qDebug() << QObject::tr("Error") << ":" << errMessage.c_str();
 }
 
-int yywrap(void) {
-	return 1;
+#include "CScanner.h"
+static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner) {
+	return scanner.yylex(yylval);
+}
+
+static void addListItem(QVariant v) {
+	QVariantList vl=qvariant_cast<QVariantList>(filo.takeLast());
+	vl.append(v);
+	filo.append(QVariant(vl));
+}
+
+static void addMapItem(QString k, QVariant v) {
+	QVariantMap vm=qvariant_cast<QVariantMap>(filo.takeLast());
+	vm.insert(k, v);
+	filo.append(QVariant(vm));
 }
 

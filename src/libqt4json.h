@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
-#ifndef _LIBQT4JSON_H__
-#define _LIBQT4JSON_H__
+#ifndef __LIBQT4JSON_H__
+#define __LIBQT4JSON_H__
 //------------------------------------------------------------------------------
 #include <QObject>
 #include <QString>

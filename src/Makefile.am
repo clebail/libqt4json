@@ -11,19 +11,19 @@ lrelease_FILES =
 libqt4json_la_SOURCES = 	libqt4json.cpp \
 				libqt4json.h 
 	
-nodist_libqt4json_la_SOURCES = 	libqt4json.y.c \
-				libqt4json.y.h \
-				libqt4json.l.c
+nodist_libqt4json_la_SOURCES = 	libqt4json.y.cpp \
+				libqt4json.y.hpp \
+				libqt4json.l.cpp
 					
 libqt4json_la_LIBADD = $(QT4_LIBS) 
 
 %.qm: %.ts
 	$(LRELEASE) $< -qm $@
 
-libqt4json.l.c: libqt4json.l
-	$(FLEX) -o $@ $<
+libqt4json.l.cpp: libqt4json.l
+	$(FLEX) -o $@ --c++ $<
 
-libqt4json.y.c: libqt4json.y
+libqt4json.y.cpp: libqt4json.y
 	$(BISON) -o $@ -d $<
 
 $(libqt4json_la_OBJECTS): $(lrelease_FILES)
@@ -31,9 +31,9 @@ $(libqt4json_la_OBJECTS): $(lrelease_FILES)
 clean-qt-extra:
 	rm -f *.o
 	rm -f *.lo
-	rm -f libqt4json.l.c
-	rm -f libqt4json.y.c
-	rm -f libqt4json.y.h
+	rm -f libqt4json.l.cpp
+	rm -f libqt4json.y.cpp
+	rm -f libqt4json.y.hpp
 	
 clean-am: clean-qt-extra
 
