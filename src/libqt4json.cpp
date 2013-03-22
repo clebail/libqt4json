@@ -24,7 +24,7 @@ namespace libqt4json {
 			return QVariant(); //TODO resultat du parse 
 		}
 		
-		return QVaraint();
+		return QVariant();
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::variantToString(QVariant variant, bool& simpleType) {

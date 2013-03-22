@@ -9,7 +9,8 @@ TRANSLATE =
 lrelease_FILES = 
 
 libqt4json_la_SOURCES = 	libqt4json.cpp \
-				libqt4json.h 
+				libqt4json.h \
+				CScanner.h
 	
 nodist_libqt4json_la_SOURCES = 	libqt4json.y.cpp \
 				libqt4json.y.hpp \
