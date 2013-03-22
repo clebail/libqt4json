@@ -16,8 +16,8 @@ libqt4json_la_SOURCES = 	$(flexBison_SOURCES) \
 				libqt4json.cpp \
 				libqt4json.h \
 				CScanner.h
-				
-nodist_libqt4json_la_SOURCES = 	
+
+nodist_libqt4json_la_SOURCES = 
 					
 libqt4json_la_LIBADD = $(QT4_LIBS) 
 
@@ -38,6 +38,7 @@ clean-qt-extra:
 	rm -f libqt4json.l.cpp
 	rm -f libqt4json.y.cpp
 	rm -f libqt4json.y.hpp
+	
 	
 clean-am: clean-qt-extra
 

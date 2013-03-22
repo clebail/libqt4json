@@ -24,6 +24,14 @@ if test x$LRELEASE = x; then
 	fi
 fi
 
+AC_CHECK_PROG(MOC, moc-qt4, moc-qt4)
+if test MOC = x; then
+	AC_CHECK_PROG(MOC, moc, moc)
+	if test MOC = x ; then
+		AC_MSG_ERROR([moc not found! Make sure you have Qt-devel-tools installed!])
+	fi
+fi
+
 AC_CHECK_PROG(FLEX, flex, flex)
 if test x$FLEX = x ; then
 	AC_MSG_ERROR([flex not found! Make sure you have flex installed!])

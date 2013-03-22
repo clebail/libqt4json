@@ -2,6 +2,7 @@
 #include <QVariant>
 #include <QRegExp>
 #include <iostream>
+#include "CPerson.h"
 
 using libqt4json::CJson;
 using namespace std;
@@ -11,19 +12,22 @@ QString variantToString(QVariant variant);
 
 int main(int argc, char **argv) {
 	CJson *json=new CJson();
-	QVariantList vl;
-	QVariantMap vm;
+	CPerson *parent1=new CPerson("Dad", new CBirthDay(QDate::fromString("07/04/1977", "dd/MM/yyyy")));
+	CPerson *parent2=new CPerson("Mum", new CBirthDay(QDate::fromString("15/07/1977", "dd/MM/yyyy")));
+	CPerson *child1=new CPerson("Cindy", new CBirthDay(QDate::fromString("01/10/2011", "dd/MM/yyyy")));
+	QVariantMap family;
+	QVariantList parents;
+	QVariantList childs;
 	
-	vl.append(35);
-	vl.append("Corentin");
+	parents.append(QVariant::fromValue((QObject *)parent1));
+	parents.append(QVariant::fromValue((QObject *)parent2));
 	
-	vm.insert("day", 7);
-	vm.insert("month", "April");
-	vm.insert("year", 1977);
+	childs.append(QVariant::fromValue((QObject *)child1));
 	
-	vl.append(QVariant(vm));
+	family.insert("parents", QVariant(parents));
+	family.insert("childs", QVariant(childs));
 	
-	QString sJson=json->toString(QVariant(vl));
+	QString sJson=json->toString(QVariant(family));
 	QVariant variant=json->fromString(sJson);
 	
 	cout << QObject::tr("Generated json").toStdString() << ":" << endl;
@@ -31,8 +35,6 @@ int main(int argc, char **argv) {
 	cout << endl;
 	cout << QObject::tr("Generated QVariant").toStdString() << ":" << endl;
 	cout << variantToString(variant).toStdString() << endl;
-	
-	delete json;
 	
 	return 0;
 }
