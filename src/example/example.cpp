@@ -1,8 +1,13 @@
 #include <libqt4json.h>
 #include <QVariant>
-#include <QtDebug>
+#include <QRegExp>
+#include <iostream>
 
 using libqt4json::CJson;
+using namespace std;
+
+QString indent(QString json);
+QString variantToString(QVariant variant);
 
 int main(int argc, char **argv) {
 	CJson *json=new CJson();
@@ -19,12 +24,47 @@ int main(int argc, char **argv) {
 	vl.append(QVariant(vm));
 	
 	QString sJson=json->toString(QVariant(vl));
-	qDebug() << sJson;
-	sJson="[35, \"corentin\", {\"day\": 7, \"month\": \"April\", \"year\": 1977}]";
-	qDebug() << sJson;
-	qDebug() << json->fromString(sJson);
+	QVariant variant=json->fromString(sJson);
+	
+	cout << QObject::tr("Generated json").toStdString() << ":" << endl;
+	cout << indent(sJson).toStdString();
+	cout << endl;
+	cout << QObject::tr("Generated QVariant").toStdString() << ":" << endl;
+	cout << variantToString(variant).toStdString() << endl;
 	
 	delete json;
 	
 	return 0;
+}
+
+QString indent(QString json) {
+	int level=0;
+	int oldPos=0;
+	int newPos;
+	QString ret="";
+	
+	while((newPos=json.indexOf(QRegExp("\\[|\\{|\\]|\\}|\\,"), oldPos)) != -1) {
+		switch(json[newPos].toAscii()) {
+			case '[':
+			case '{':
+				ret+=QString(level, QChar('\t'))+json.mid(oldPos, newPos-oldPos+1).trimmed()+"\r\n";
+				level++;
+				break;
+			case ',':
+				ret+=QString(level, QChar('\t'))+json.mid(oldPos, newPos-oldPos+1).trimmed()+"\r\n";
+				break;
+			default:
+				ret+=QString(level, QChar('\t'))+json.mid(oldPos, newPos-oldPos).trimmed()+"\r\n";
+				level--;
+				ret+=QString(level, QChar('\t'))+json[newPos]+"\r\n";
+		}
+		oldPos=newPos+1;
+	}
+	
+	return ret;
+}
+
+QString variantToString(QVariant variant) {
+	QString ret="";
+	return ret;
 }

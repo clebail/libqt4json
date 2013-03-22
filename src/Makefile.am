@@ -42,6 +42,10 @@ clean-qt-extra:
 clean-am: clean-qt-extra
 
 install-data-hook:
+	mkdir -p $(includedir); \
+	mkdir -p $(libdir)/pkgconfig; \
+	cp $(srcdir)/libqt4json.h $(includedir); \
+	cp $(srcdir)/libqt4json.pc $(libdir)/pkgconfig
 	
 dist-hook:
 	cp $(srcdir)/libqt4json.l $(distdir); \
