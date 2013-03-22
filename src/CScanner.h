@@ -23,6 +23,9 @@ namespace libqt4json {
 				yylval=lval;
 				return yylex();
 			}
+			
+			QVariant getResult() { return result; }
+			void setResult(QVariant result) { this->result=result; }
 		private:
 			int yylex();
 			libqt4json::CParser::semantic_type *yylval;

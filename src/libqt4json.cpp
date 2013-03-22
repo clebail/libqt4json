@@ -5,6 +5,8 @@
 #include "libqt4json.h"
 #include "CScanner.h"
 //------------------------------------------------------------------------------
+extern QVariant result;
+//------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
 	QString CJson::toString(QVariant variant) {
@@ -21,7 +23,7 @@ namespace libqt4json {
 		CScanner *scanner=new CScanner(&iss);
 		CParser *parser=new CParser(*scanner);
 		if(!parser->parse()) {
-			return QVariant(); //TODO resultat du parse 
+			return result;
 		}
 		
 		return QVariant();

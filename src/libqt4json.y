@@ -25,6 +25,8 @@
 	static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner);
 	static void addListItem(QVariant v);
 	static void addMapItem(QString k, QVariant v);
+	
+	QVariant result;
 }
 %union {
 	QVariant *variant;
@@ -39,7 +41,7 @@
 
 %start AXIOME
 %%
-AXIOME	:	EXP						{ 	filo.takeLast(); }
+AXIOME	:	EXP						{ 	result=filo.takeLast(); }
 		;
 EXP		:	LIST					{}
 		|	MAP						{}

@@ -8,13 +8,16 @@ TRANSLATE =
 
 lrelease_FILES = 
 
-libqt4json_la_SOURCES = 	libqt4json.cpp \
+flexBison_SOURCES =	libqt4json.y.cpp \
+			libqt4json.y.hpp \
+			libqt4json.l.cpp 
+
+libqt4json_la_SOURCES = 	$(flexBison_SOURCES) \
+				libqt4json.cpp \
 				libqt4json.h \
 				CScanner.h
-	
-nodist_libqt4json_la_SOURCES = 	libqt4json.y.cpp \
-				libqt4json.y.hpp \
-				libqt4json.l.cpp
+				
+nodist_libqt4json_la_SOURCES = 	
 					
 libqt4json_la_LIBADD = $(QT4_LIBS) 
 
@@ -42,4 +45,5 @@ install-data-hook:
 	
 dist-hook:
 	cp $(srcdir)/libqt4json.l $(distdir); \
-	cp $(srcdir)/libqt4json.y $(distdir);
+	cp $(srcdir)/libqt4json.y $(distdir); \
+	cd $(distdir) && rm $(flexBison_SOURCES);

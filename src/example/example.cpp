@@ -20,9 +20,9 @@ int main(int argc, char **argv) {
 	
 	QString sJson=json->toString(QVariant(vl));
 	qDebug() << sJson;
-	sJson="[1, \"corentin\", [2, {\"test\": \"neness\", \"bobby\": [1, 3, \"essai\"], \"nounouille\": {\"alert\": 45}}]]";
+	sJson="[35, \"corentin\", {\"day\": 7, \"month\": \"April\", \"year\": 1977}]";
 	qDebug() << sJson;
-	json->fromString(sJson);
+	qDebug() << json->fromString(sJson);
 	
 	delete json;
 	
