@@ -29,11 +29,11 @@ class CPerson : public QObject {
 			int curYear=curDate.year();
 			int curMonth=curDate.month();
 			int curDay=curDate.day();
-			int age=curYear-birthDay->getYear()-1;
+			int age=curYear-birthDay->getYear();
 			if(curMonth < birthDay->getMonth() || (curMonth == birthDay->getMonth() && curDay < birthDay->getDay())) {
-				return age;
+				return age-1;
 			}
-			return age+1;
+			return age;
 		}
 		CBirthDay *getBirthDay(void) { return birthDay; } 
 	private:

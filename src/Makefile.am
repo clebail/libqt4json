@@ -38,6 +38,7 @@ clean-qt-extra:
 	rm -f libqt4json.l.cpp
 	rm -f libqt4json.y.cpp
 	rm -f libqt4json.y.hpp
+	rm -rf
 	
 	
 clean-am: clean-qt-extra
@@ -51,4 +52,6 @@ install-data-hook:
 dist-hook:
 	cp $(srcdir)/libqt4json.l $(distdir); \
 	cp $(srcdir)/libqt4json.y $(distdir); \
+	cp $(srcdir)/libqt4json.doxy $(distdir); \
+	cp $(srcdir)/libqt4json.png $(distdir); \
 	cd $(distdir) && rm $(flexBison_SOURCES);
