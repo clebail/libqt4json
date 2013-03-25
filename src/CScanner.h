@@ -17,7 +17,7 @@ namespace libqt4json {
 	//------------------------------------------------------------------------------
 	class CScanner : public yyFlexLexer {
 		public:
-			CScanner(std::istream *in) : yyFlexLexer(in), yylval(0) { lineno=1; }
+			CScanner(std::istream *in) : yyFlexLexer(in), yylval(0) { }
 			
 			int yylex(libqt4json::CParser::semantic_type *lval) {
 				yylval=lval;
@@ -30,7 +30,6 @@ namespace libqt4json {
 			int yylex();
 			libqt4json::CParser::semantic_type *yylval;
 			QVariant result;
-			int lineno;
 	};		
 } //namespace
 //------------------------------------------------------------------------------

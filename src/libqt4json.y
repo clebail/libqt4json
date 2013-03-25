@@ -30,8 +30,6 @@
 	
 	QVariant result;
 	QString lastError;
-
-	int lineno=0;
 }
 %union {
 	QVariant *variant;

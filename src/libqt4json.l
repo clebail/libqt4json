@@ -12,8 +12,12 @@ using namespace std;
 %option yyclass="CScanner"
 %option noyywrap
 %option c++
+%option yylineno
 
 SPACE			[ \t]
+CR				[\r]
+LF				[\n]
+CRLF			{LF}|{CR}{LF}
 DIGIT1to9		[1-9]
 DIGIT			[0-9]
 DIGITS			{DIGIT}+
@@ -70,9 +74,9 @@ NULL			[nN][uU][lL]{2}
 {NULL}		{	return token::NULLVALUE;
 			}
 {SPACE}		{}
-"\n"		{	yylineno++;
+{CRLF}		{	yylineno++;
 			}
-.			{ 	qDebug() << QObject::tr("Unkown lexem") << yytext << QObject::tr("at line") << yylineno;
+.			{ 	qDebug() << QObject::tr("Unkown lexem") << *yytext << QObject::tr("at line") << yylineno;
 			}
 %%
 
