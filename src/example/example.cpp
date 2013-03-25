@@ -28,10 +28,10 @@ int main(int argc, char **argv) {
 	family.insert("parents", QVariant(parents));
 	family.insert("childs", QVariant(childs));
 	
-	QString sJson=json->toString(QVariant(family));
+	QString sJson=indent(json->toString(QVariant(family)));
 	
 	cout << QObject::tr("Generated json").toStdString() << ":" << endl;
-	cout << indent(sJson).toStdString();
+	cout << sJson.toStdString();
 	cout << endl;
 
 	QVariant variant=json->fromString(sJson+"ff", ok);

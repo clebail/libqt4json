@@ -70,9 +70,9 @@ NULL			[nN][uU][lL]{2}
 {NULL}		{	return token::NULLVALUE;
 			}
 {SPACE}		{}
-"\n"		{	
+"\n"		{	lineno++;	
 			}
-.			{ 	qDebug() << QObject::tr("Unkown lexem") <<  yytext;
+.			{ 	qDebug() << (QObject::tr("Unkown lexem")+" "+QString(yytext)+" "+QObject::tr("at line")+" "+QString(lineno));
 			}
 %%
 
