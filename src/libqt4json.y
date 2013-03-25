@@ -26,6 +26,7 @@
 
 %code {
 	#include "CDriver.h"
+	#include "CScanner.h"
 
 	static QList<QVariant> filo;
 	
@@ -92,7 +93,6 @@ void libqt4json::CParser::error(const libqt4json::CParser::location_type &l, con
 	driver.setLastError(QObject::tr("Error")+": "+QString(errMessage.c_str())+" "+QObject::tr("at line")+" "+QString::number(l.begin.line));
 }
 
-#include "CScanner.h"
 static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CParser::location_type *yylloc, libqt4json::CScanner &scanner, libqt4json::CDriver &driver) {
 	return scanner.yylex(yylval, yylloc);
 }
