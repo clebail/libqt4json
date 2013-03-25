@@ -12,13 +12,6 @@ using namespace std;
 %option yyclass="CScanner"
 %option noyywrap
 %option c++
-%{
-#define YY_USER_ACTION yylloc->columns(yyleng);
-%}
-
-%{
-	yylloc->step();
-%}
 
 CR				[\n]
 SPACE			[ \t\r]
@@ -77,9 +70,8 @@ NULL			[nN][uU][lL]{2}
 			}
 {NULL}		{	return token::NULLVALUE;
 			}
-{CR}		{	yylloc->lines(yyleng); yylloc->step(); }
-{SPACE}		{ 	yylloc->step();	}
-.			{ 	qDebug() << "erreur" << yylineno;
-			}
+{CR}		{ } //TODO
+{SPACE}		{ } //TODO
+.			{ } //TODO
 %%
 

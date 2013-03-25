@@ -7,7 +7,7 @@
 #endif
 
 #undef  YY_DECL
-#define YY_DECL int libqt4json::CScanner::yylex(libqt4json::CParser::semantic_type *lval, libqt4json::CParser::location_type *lloc)
+#define YY_DECL int libqt4json::CScanner::yylex(libqt4json::CParser::semantic_type *lval)
  
 #include <QList>
 #include <QVariant>
@@ -17,11 +17,10 @@ namespace libqt4json {
 	//------------------------------------------------------------------------------
 	class CScanner : public yyFlexLexer {
 		public:
-			CScanner(std::istream *in) : yyFlexLexer(in), yylval(0), yylloc(0) { }
+			CScanner(std::istream *in) : yyFlexLexer(in), yylval(0) { }
 			
-			int yylex(libqt4json::CParser::semantic_type *lval, libqt4json::CParser::location_type *lloc) {
+			int yylex(libqt4json::CParser::semantic_type *lval) {
 				yylval=lval;
-				yylloc=lloc;
 				return yylex();
 			}
 			
@@ -30,7 +29,6 @@ namespace libqt4json {
 		private:
 			int yylex();
 			libqt4json::CParser::semantic_type *yylval;
-			libqt4json::CParser::location_type *yylloc;
 			QVariant result;
 	};		
 } //namespace

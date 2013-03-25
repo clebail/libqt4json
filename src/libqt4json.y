@@ -1,5 +1,7 @@
 %skeleton "lalr1.cc"
 
+%require "2.3"
+
 %defines
 %define namespace "libqt4json"
 %define parser_class_name "CParser"
@@ -17,8 +19,9 @@
 	}
 }
 
-%lex-param		{ CScanner &scanner }
+%lex-param		{ SCsanner &scanner }
 %lex-param		{ CDriver &driver }
+
 %parse-param	{ CScanner &scanner }
 %parse-param	{ CDriver &driver }
 
@@ -30,7 +33,7 @@
 
 	static QList<QVariant> filo;
 	
-	static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CParser::location_type *yylloc, libqt4json::CScanner &scanner, libqt4json::CDriver &driver);
+	static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner, libqt4json::CDriver &driver);
 	static void addListItem(QVariant *v);
 	static void addListItem(QVariant v);
 	static void addMapItem(QVariant *k, QVariant *v);
@@ -93,8 +96,8 @@ void libqt4json::CParser::error(const libqt4json::CParser::location_type &l, con
 	driver.setLastError(QObject::tr("Error")+": "+QString(errMessage.c_str())+" "+QObject::tr("at line")+" "+QString::number(l.begin.line));
 }
 
-static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CParser::location_type *yylloc, libqt4json::CScanner &scanner, libqt4json::CDriver &driver) {
-	return scanner.yylex(yylval, yylloc);
+static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner, libqt4json::CDriver &driver) {
+	return scanner.yylex(yylval);
 }
 
 static void addListItem(QVariant *v) {
