@@ -14,10 +14,7 @@ using namespace std;
 %option c++
 %option yylineno
 
-SPACE			[ \t]
-CR				[\r]
-LF				[\n]
-CRLF			{LF}|{CR}{LF}
+SPACE			[ \t\r\n]
 DIGIT1to9		[1-9]
 DIGIT			[0-9]
 DIGITS			{DIGIT}+
@@ -74,8 +71,6 @@ NULL			[nN][uU][lL]{2}
 {NULL}		{	return token::NULLVALUE;
 			}
 {SPACE}		{}
-{CRLF}		{	yylineno++;
-			}
 .			{ 	qDebug() << QObject::tr("Unkown lexem") << *yytext << QObject::tr("at line") << yylineno;
 			}
 %%

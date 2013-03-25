@@ -84,7 +84,7 @@ PAIR	:	STRING COLON INT		{	addMapItem($1, $3); }
 %%
 
 void libqt4json::CParser::error(const libqt4json::CParser::location_type &l, const string &errMessage) {
-	lastError=QObject::tr("Error")+":"+errMessage.c_str();
+	lastError=QObject::tr("Error")+": "+errMessage.c_str();
 }
 
 #include "CScanner.h"
