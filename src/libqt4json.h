@@ -45,7 +45,7 @@ namespace libqt4json {
 			QString getLastError(void);
 		private:
 			QString lastError;
-		
+
 			QString variantToString(QVariant variant, bool& simpleType);
 			QString objectStarToString(QVariant variant);
 			QString listToString(QVariant variant);

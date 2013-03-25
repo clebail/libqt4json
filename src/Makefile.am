@@ -15,7 +15,9 @@ flexBison_SOURCES =	libqt4json.y.cpp \
 libqt4json_la_SOURCES = 	$(flexBison_SOURCES) \
 				libqt4json.cpp \
 				libqt4json.h \
-				CScanner.h
+				CScanner.h \
+				CDriver.cpp \
+				CDriver.h
 
 nodist_libqt4json_la_SOURCES = 
 					

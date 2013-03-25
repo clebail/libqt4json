@@ -13,23 +13,27 @@
 	
 	namespace libqt4json {
 		class CScanner;
+		class CDriver;
 	}
 }
 
 %lex-param		{ CScanner &scanner }
+%lex-param		{ CDriver &driver }
 %parse-param	{ CScanner &scanner }
+%parse-param	{ CDriver &driver }
+
+%error-verbose
 
 %code {
+	#include "CDriver.h"
+
 	static QList<QVariant> filo;
 	
-	static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner);
+	static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CParser::location_type *yylloc, libqt4json::CScanner &scanner, libqt4json::CDriver &driver);
 	static void addListItem(QVariant *v);
 	static void addListItem(QVariant v);
 	static void addMapItem(QVariant *k, QVariant *v);
 	static void addMapItem(QVariant *k, QVariant v);
-	
-	QVariant result;
-	QString lastError;
 }
 %union {
 	QVariant *variant;
@@ -41,10 +45,11 @@
 %token LISTO LISTF
 %token MAPO MAPF
 %token COMMA COLON
+%token NEWLINE
 
 %start AXIOME
 %%
-AXIOME	:	EXP						{ 	result=filo.takeLast(); }
+AXIOME	:	EXP						{ 	driver.setResult(filo.takeLast()); }
 		;
 EXP		:	LIST					{}
 		|	MAP						{}
@@ -84,12 +89,12 @@ PAIR	:	STRING COLON INT		{	addMapItem($1, $3); }
 %%
 
 void libqt4json::CParser::error(const libqt4json::CParser::location_type &l, const string &errMessage) {
-	lastError=QObject::tr("Error")+": "+errMessage.c_str();
+	driver.setLastError(QObject::tr("Error")+": "+QString(errMessage.c_str())+" "+QObject::tr("at line")+" "+QString::number(l.begin.line));
 }
 
 #include "CScanner.h"
-static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner) {
-	return scanner.yylex(yylval);
+static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CParser::location_type *yylloc, libqt4json::CScanner &scanner, libqt4json::CDriver &driver) {
+	return scanner.yylex(yylval, yylloc);
 }
 
 static void addListItem(QVariant *v) {

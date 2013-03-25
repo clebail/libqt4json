@@ -1,39 +1,29 @@
 //------------------------------------------------------------------------------
-#ifndef __CSCANNER_H__
-#define __CSCANNER_H__
+#ifndef __CDRIVER_H__
+#define __CDRIVER_H__
 //------------------------------------------------------------------------------
-#if ! defined(yyFlexLexerOnce)
-#include <FlexLexer.h>
-#endif
-
-#undef  YY_DECL
-#define YY_DECL int libqt4json::CScanner::yylex(libqt4json::CParser::semantic_type *lval, libqt4json::CParser::location_type *lloc)
- 
-#include <QList>
 #include <QVariant>
+#include <QString>
 #include "libqt4json.y.hpp"
+#include "CScanner.h"
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
-	class CScanner : public yyFlexLexer {
+	class CDriver {
 		public:
-			CScanner(std::istream *in) : yyFlexLexer(in), yylval(0), yylloc(0) { }
+			CDriver(void) {}
 			
-			int yylex(libqt4json::CParser::semantic_type *lval, libqt4json::CParser::location_type *lloc) {
-				yylval=lval;
-				yylloc=lloc;
-				return yylex();
-			}
-			
+			void parse(QString json, bool& ok);
 			QVariant getResult() { return result; }
 			void setResult(QVariant result) { this->result=result; }
+			void setLastError(QString lastError) { this->lastError=lastError; }
+			QString getLastError(void) { return lastError; }
 		private:
-			int yylex();
-			libqt4json::CParser::semantic_type *yylval;
-			libqt4json::CParser::location_type *yylloc;
 			QVariant result;
+			QString lastError;
+			CScanner *scanner;
 	};		
 } //namespace
 //------------------------------------------------------------------------------
-#endif //__CSCANNER_H__
+#endif //__CDRIVER_H__
 //------------------------------------------------------------------------------

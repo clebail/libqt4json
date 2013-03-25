@@ -23,6 +23,7 @@ class CPerson : public QObject {
 	Q_PROPERTY(QObject* birthDay READ getBirthDay);
 	public:
 		CPerson(QString name, CBirthDay *birthDay) { this->name=name; this->birthDay=birthDay; }
+		~CPerson(void) { delete birthDay; }
 		QString getName(void) { return name; }
 		int getAge(void) { 
 			QDate curDate=QDate::currentDate();

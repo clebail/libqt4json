@@ -3,10 +3,7 @@
 #include <QtDebug>
 #include <sstream>
 #include "libqt4json.h"
-#include "CScanner.h"
-//------------------------------------------------------------------------------
-extern QVariant result;
-extern QString lastError;
+#include "CDriver.h"
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
@@ -20,23 +17,23 @@ namespace libqt4json {
 	}
 	//------------------------------------------------------------------------------
 	QVariant CJson::fromString(QString json, bool& ok) {
-		std::istringstream iss(json.toStdString());
-		CScanner *scanner=new CScanner(&iss);
-		CParser *parser=new CParser(*scanner);
-		if(!parser->parse()) {
-			ok=true;
-			this->lastError="";
-			return result;
+		CDriver *driver=new CDriver();
+		QVariant ret;
+
+		driver->parse(json, ok);
+		if(ok) {
+			ret=driver->getResult();
 		}
 
-		ok=false;
-		this->lastError=lastError;
+		lastError=driver->getLastError();
 
-		return QVariant();
+		delete driver;
+
+		return ret;
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::getLastError(void) {
-		return this->lastError;
+		return lastError;
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::variantToString(QVariant variant, bool& simpleType) {

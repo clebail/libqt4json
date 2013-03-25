@@ -11,6 +11,8 @@ QString indent(QString json);
 QString variantToString(QVariant variant);
 
 int main(int argc, char **argv) {
+	int i;
+
 	CJson *json=new CJson();
 	CPerson *parent1=new CPerson("Dad", new CBirthDay(QDate::fromString("07/04/1977", "dd/MM/yyyy")));
 	CPerson *parent2=new CPerson("Mum", new CBirthDay(QDate::fromString("15/07/1977", "dd/MM/yyyy")));
@@ -34,13 +36,18 @@ int main(int argc, char **argv) {
 	cout << sJson.toStdString();
 	cout << endl;
 
-	QVariant variant=json->fromString(sJson+"]", ok);
+	QVariant variant=json->fromString(sJson+"q", ok);
 	if(!ok) {
 		cout << json->getLastError().toStdString() << endl;
 	}else {
 		cout << QObject::tr("Generated QVariant").toStdString() << ":" << endl;
 		cout << variantToString(variant).toStdString() << endl;
 	}
+
+	delete child1;
+	delete parent2;
+	delete parent1;
+	delete json;
 	
 	return 0;
 }
