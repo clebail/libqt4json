@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 	cout << sJson.toStdString();
 	cout << endl;
 
-	QVariant variant=json->fromString(sJson+"ff", ok);
+	QVariant variant=json->fromString(sJson, ok);
 	if(!ok) {
 		cout << json->getLastError().toStdString() << endl;
 	}else {
