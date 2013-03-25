@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
 	QVariantMap family;
 	QVariantList parents;
 	QVariantList childs;
+	bool ok;
 	
 	parents.append(QVariant::fromValue((QObject *)parent1));
 	parents.append(QVariant::fromValue((QObject *)parent2));
@@ -28,13 +29,18 @@ int main(int argc, char **argv) {
 	family.insert("childs", QVariant(childs));
 	
 	QString sJson=json->toString(QVariant(family));
-	QVariant variant=json->fromString(sJson);
 	
 	cout << QObject::tr("Generated json").toStdString() << ":" << endl;
 	cout << indent(sJson).toStdString();
 	cout << endl;
-	cout << QObject::tr("Generated QVariant").toStdString() << ":" << endl;
-	cout << variantToString(variant).toStdString() << endl;
+
+	QVariant variant=json->fromString(sJson+"ff", ok);
+	if(!ok) {
+		cout << json->getLastError().toStdString() << endl;
+	}else {
+		cout << QObject::tr("Generated QVariant").toStdString() << ":" << endl;
+		cout << variantToString(variant).toStdString() << endl;
+	}
 	
 	return 0;
 }

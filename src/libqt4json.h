@@ -34,10 +34,18 @@ namespace libqt4json {
 			 * \fn QVariant fromString(QString json)
 			 * \brief Deserializator
 			 * \param[in] json Json string to deserialize
+			 * \param[out] ok Set to true if no error occur, false otherwise
 			 * \return A QVariant object that represents Json
 			 */
-			QVariant fromString(QString json);
+			QVariant fromString(QString json, bool& ok);
+			/**
+			 * \fn QString getLastError(void)
+			 * \return Last parsing error;
+			 */
+			QString getLastError(void);
 		private:
+			QString lastError;
+		
 			QString variantToString(QVariant variant, bool& simpleType);
 			QString objectStarToString(QVariant variant);
 			QString listToString(QVariant variant);

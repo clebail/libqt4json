@@ -13,7 +13,7 @@ using namespace std;
 %option noyywrap
 %option c++
 
-SPACE			[ \t\r\n]
+SPACE			[ \t]
 DIGIT1to9		[1-9]
 DIGIT			[0-9]
 DIGITS			{DIGIT}+
@@ -70,6 +70,8 @@ NULL			[nN][uU][lL]{2}
 {NULL}		{	return token::NULLVALUE;
 			}
 {SPACE}		{}
+"\n"		{	
+			}
 .			{ 	qDebug() << QObject::tr("Unkown lexem") <<  yytext;
 			}
 %%

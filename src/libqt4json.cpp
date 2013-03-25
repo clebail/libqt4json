@@ -6,6 +6,7 @@
 #include "CScanner.h"
 //------------------------------------------------------------------------------
 extern QVariant result;
+extern QString lastError;
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
@@ -18,15 +19,24 @@ namespace libqt4json {
 		return json;
 	}
 	//------------------------------------------------------------------------------
-	QVariant CJson::fromString(QString json) {
+	QVariant CJson::fromString(QString json, bool& ok) {
 		std::istringstream iss(json.toStdString());
 		CScanner *scanner=new CScanner(&iss);
 		CParser *parser=new CParser(*scanner);
 		if(!parser->parse()) {
+			ok=true;
+			this->lastError="";
 			return result;
 		}
-		
+
+		ok=false;
+		this->lastError=lastError;
+
 		return QVariant();
+	}
+	//------------------------------------------------------------------------------
+	QString CJson::getLastError(void) {
+		return this->lastError;
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::variantToString(QVariant variant, bool& simpleType) {
