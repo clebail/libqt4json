@@ -72,6 +72,6 @@ NULL			[nN][uU][lL]{2}
 			}
 {CR}		{ } //TODO
 {SPACE}		{ } //TODO
-.			{ } //TODO
+.			{ cout << "unkown lexem" << *yytext; }
 %%
 

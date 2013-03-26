@@ -5,7 +5,6 @@
 #include <QVariant>
 #include <QString>
 #include "libqt4json.y.hpp"
-#include "CScanner.h"
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
@@ -21,7 +20,6 @@ namespace libqt4json {
 		private:
 			QVariant result;
 			QString lastError;
-			CScanner *scanner;
 	};		
 } //namespace
 //------------------------------------------------------------------------------

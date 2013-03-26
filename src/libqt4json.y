@@ -21,16 +21,15 @@
 
 %lex-param		{ SCsanner &scanner }
 %lex-param		{ CDriver &driver }
-
 %parse-param	{ CScanner &scanner }
 %parse-param	{ CDriver &driver }
 
 %error-verbose
 
 %code {
-	#include "CDriver.h"
 	#include "CScanner.h"
-
+	#include "CDriver.h"
+	
 	static QList<QVariant> filo;
 	
 	static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner, libqt4json::CDriver &driver);
@@ -53,7 +52,7 @@
 
 %start AXIOME
 %%
-AXIOME	:	EXP						{ 	driver.setResult(filo.takeLast()); }
+AXIOME	:	EXP						{ driver.setResult(filo.takeLast()); }
 		;
 EXP		:	LIST					{}
 		|	MAP						{}

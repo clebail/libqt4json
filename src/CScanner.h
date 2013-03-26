@@ -7,7 +7,7 @@
 #endif
 
 #undef  YY_DECL
-#define YY_DECL int libqt4json::CScanner::yylex(libqt4json::CParser::semantic_type *lval)
+#define YY_DECL int libqt4json::CScanner::yylex()
  
 #include <QList>
 #include <QVariant>
@@ -23,13 +23,9 @@ namespace libqt4json {
 				yylval=lval;
 				return yylex();
 			}
-			
-			QVariant getResult() { return result; }
-			void setResult(QVariant result) { this->result=result; }
 		private:
 			int yylex();
 			libqt4json::CParser::semantic_type *yylval;
-			QVariant result;
 	};		
 } //namespace
 //------------------------------------------------------------------------------
