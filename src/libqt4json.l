@@ -13,8 +13,8 @@ using namespace std;
 %option noyywrap
 %option c++
 
-CR				[\n]
-SPACE			[ \t\r]
+LF				[\n]
+SPACE			[ \t\r\n]
 DIGIT1to9		[1-9]
 DIGIT			[0-9]
 DIGITS			{DIGIT}+
@@ -70,8 +70,10 @@ NULL			[nN][uU][lL]{2}
 			}
 {NULL}		{	return token::NULLVALUE;
 			}
-{CR}		{ } //TODO
-{SPACE}		{ } //TODO
-.			{ cout << "unkown lexem" << *yytext; }
+{LF}		{	lineNo++; }
+{SPACE}		{}
+.			{ 	onError=true;
+				errors.append(QObject::tr("unkown lexem")+" "+QString(*yytext)+" "+QObject::tr("at line")+" "+QString::number(lineNo));
+			}
 %%
 

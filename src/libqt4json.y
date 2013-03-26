@@ -92,7 +92,7 @@ PAIR	:	STRING COLON INT		{	addMapItem($1, $3); }
 %%
 
 void libqt4json::CParser::error(const libqt4json::CParser::location_type &l, const string &errMessage) {
-	driver.setLastError(QObject::tr("Error")+": "+QString(errMessage.c_str())+" "+QObject::tr("at line")+" "+QString::number(l.begin.line));
+	driver.setLastError(QObject::tr("Error")+": "+QString(errMessage.c_str())+" "+QObject::tr("at line")+" "+QString::number(scanner.getLineNo()));
 }
 
 static int yylex(libqt4json::CParser::semantic_type *yylval, libqt4json::CScanner &scanner, libqt4json::CDriver &driver) {
