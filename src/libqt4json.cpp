@@ -89,7 +89,7 @@ namespace libqt4json {
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::listToString(QVariant variant) {
-		QVariantList l=qvariant_cast<QVariantList>(variant);
+		QVariantList l=variant.toList();
 		int i;
 		QString json="[";
 		QString s="";
@@ -106,7 +106,7 @@ namespace libqt4json {
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::mapToString(QVariant variant) {
-		QVariantMap m=qvariant_cast<QVariantMap>(variant);
+		QVariantMap m=variant.toMap();
 		QMapIterator<QString, QVariant> i(m);
 		QString json="{";
 		QString s="";

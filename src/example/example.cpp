@@ -8,7 +8,9 @@ using libqt4json::CJson;
 using namespace std;
 
 QString indent(QString json);
-QString variantToString(QVariant variant);
+QString variantToString(QVariant variant, int level=0, QString memberName=QString());
+QString variantMapToString(QVariantMap vm, int level);
+QString variantListToString(QVariantList vl, int level);
 
 int main(int argc, char **argv) {
 	int i;
@@ -79,7 +81,54 @@ QString indent(QString json) {
 	return ret;
 }
 
-QString variantToString(QVariant variant) {
+QString variantToString(QVariant variant, int level, QString memberName) {
 	QString ret="";
+	QString tab=QString(level, QChar('\t'));
+	
+	memberName=QString("(")+QString(variant.typeName())+QString(") ")+memberName+QString(": ");
+	switch(variant.type()) {
+		case QVariant::Double:
+		case QVariant::Int:
+		case QVariant::LongLong:
+			ret=tab+memberName+variant.toString();
+			break;
+		case QVariant::List:
+			ret=tab+memberName+"\n"+variantListToString(variant.toList(), level+1);
+			break;
+		case QVariant::Map:
+			ret=tab+memberName+"\n"+variantMapToString(variant.toMap(), level+1);
+			break;
+		default:
+			if(variant.canConvert<QString>()) {
+				ret=tab+memberName+variant.toString();
+			}else {
+				ret=tab+memberName+"Unkonwn type";
+			}
+			break;
+	}
+	
+	return ret+"\n";
+}
+
+QString variantMapToString(QVariantMap vm, int level) {
+	QMapIterator<QString, QVariant> i(vm);
+	QString ret="";
+		
+	while (i.hasNext()) {
+		i.next();
+		ret+=variantToString(i.value(), level, i.key());
+	}
+	
+	return ret;
+}
+
+QString variantListToString(QVariantList vl, int level) {
+	int i;
+	QString ret="";
+		
+	for(i=0;i<vl.size();i++) {
+		ret+=variantToString(vl.at(i), level);
+	}
+	
 	return ret;
 }
