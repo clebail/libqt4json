@@ -1,4 +1,4 @@
-AC_INIT([libqt4json], [1.0.0-prealpha1], [corentin.lebail@gmail.com],,[https://sourceforge.net/projects/libqt4json/]) 
+AC_INIT([libqt4json], [1.0.0-beta1], [corentin.lebail@gmail.com],,[https://sourceforge.net/projects/libqt4json/]) 
 
 LT_INIT
 LT_LANG([C++])
