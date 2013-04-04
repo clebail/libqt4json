@@ -1,8 +1,10 @@
 #include <libqt4json.h>
+#include <QApplication>
 #include <QVariant>
 #include <QRegExp>
 #include <iostream>
 #include "CPerson.h"
+#include "CJsonView.h"
 
 using libqt4json::CJson;
 using namespace std;
@@ -23,6 +25,8 @@ int main(int argc, char **argv) {
 	QVariantList parents;
 	QVariantList childs;
 	bool ok;
+	QApplication app(argc, argv);
+	CJsonView *jsonView=new CJsonView();
 	
 	parents.append(QVariant::fromValue((QObject *)parent1));
 	parents.append(QVariant::fromValue((QObject *)parent2));
@@ -34,7 +38,7 @@ int main(int argc, char **argv) {
 	
 	QString sJson=indent(json->toString(QVariant(family)));
 	
-	cout << QObject::tr("Generated json").toStdString() << ":" << endl;
+	/*cout << QObject::tr("Generated json").toStdString() << ":" << endl;
 	cout << sJson.toStdString();
 	cout << endl;
 
@@ -44,14 +48,20 @@ int main(int argc, char **argv) {
 	}else {
 		cout << QObject::tr("Generated QVariant").toStdString() << ":" << endl;
 		cout << variantToString(variant).toStdString() << endl;
-	}
+	}*/
+
+	jsonView->setJson(sJson);
+	jsonView->show();
+
+	int ret=app.exec();
 
 	delete child1;
 	delete parent2;
 	delete parent1;
 	delete json;
+	delete jsonView;
 	
-	return 0;
+	return ret;
 }
 
 QString indent(QString json) {

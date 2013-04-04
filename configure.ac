@@ -42,6 +42,6 @@ if test x$BISON = x ; then
 	AC_MSG_ERROR([bison not found! Make sure you have bison installed!])
 fi
 
-PKG_CHECK_MODULES([QT4], [QtCore])
+PKG_CHECK_MODULES([QT4], [QtCore QtGui])
 
 AC_OUTPUT

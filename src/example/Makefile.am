@@ -7,7 +7,9 @@ TRANSLATE =
 lrelease_FILES =
 
 example_SOURCES =	example.cpp \
-			CPerson.h
+					CPerson.h \
+					CJsonView.cpp \
+					CJsonView.h
 
 			
 nodist_example_SOURCES =	moc_CPerson.cpp
