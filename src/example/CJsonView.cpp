@@ -1,4 +1,5 @@
 //------------------------------------------------------------------------------
+#include <QPainter>
 #include "CJsonView.h"
 //------------------------------------------------------------------------------
 void CJsonView::setJson(QString json) {
@@ -10,5 +11,10 @@ void CJsonView::setJson(QString json) {
 }
 //------------------------------------------------------------------------------
 void CJsonView::paintEvent(QPaintEvent *event) {
+	QPainter painter(this);
+	
+	painter.setPen(Qt::white);
+	painter.setBrush(Qt::white);
+	painter.drawRect(rect());
 }
 //------------------------------------------------------------------------------
