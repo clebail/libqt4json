@@ -1,4 +1,4 @@
-AC_INIT([libqt4json], [1.0.0-beta1], [corentin.lebail@gmail.com],,[https://sourceforge.net/projects/libqt4json/]) 
+AC_INIT([libqt4json], [1.0.0-beta2], [corentin.lebail@gmail.com],,[https://sourceforge.net/projects/libqt4json/]) 
 
 LT_INIT
 LT_LANG([C++])
@@ -14,7 +14,7 @@ AC_PROG_LIBTOOL
 
 AC_CONFIG_MACRO_DIR([m4])
 
-AC_CONFIG_FILES([Makefile src/Makefile src/example/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile src/libqt4json.pc src/example/Makefile])
 
 AC_CHECK_PROG(LRELEASE, lrelease-qt4, lrelease-qt4)
 if test x$LRELEASE = x; then
