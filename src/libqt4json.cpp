@@ -133,7 +133,7 @@ namespace libqt4json {
 		str=str.replace("\r", "\\\r");
 		str=str.replace("\t", "\\\t");
 		
-		return str;
+		return CDriver::toUnicode(str);
 	}
 	//------------------------------------------------------------------------------
 } //namespace

@@ -34,16 +34,6 @@ namespace libqt4json {
 		return str;
 	}
 	//------------------------------------------------------------------------------
-	int CDriver::getNbUnicodeChar(unsigned char c) {
-		int nbChar = 0;
-		while(c & UNICODE_CHAR_MASK) {
-			nbChar++;
-			c <<= 1;
-		}
-
-		return nbChar;
-	}
-	//------------------------------------------------------------------------------
 	QString CDriver::toUnicode(QString str) {
 		QByteArray ba = str.toAscii();
 		int i;
@@ -69,6 +59,16 @@ namespace libqt4json {
 		}
 
 		return uJson;
+	}
+	//------------------------------------------------------------------------------
+	int CDriver::getNbUnicodeChar(unsigned char c) {
+		int nbChar = 0;
+		while(c & UNICODE_CHAR_MASK) {
+			nbChar++;
+			c <<= 1;
+		}
+
+		return nbChar;
 	}
 	//------------------------------------------------------------------------------
 } //namespace
