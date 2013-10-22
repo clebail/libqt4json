@@ -28,9 +28,10 @@ namespace libqt4json {
 			if(c & UNICODE_CHAR_MASK) {
 				unsigned code = 0;
 				int nbUnicodeChar = getNbUnicodeChar(c);
-
+				//TODO Verif UTF 8 valid sequence (http://fr.wikipedia.org/wiki/UTF-8)
 				code |= ((unsigned)c & ((1 << (7-nbUnicodeChar))-1)) << ((nbUnicodeChar-1)*6);  			
 				for(int j=1;j<nbUnicodeChar;j++) {
+					//TODO c id valid (c >= 0x80 && c <= 0xBF)
 					const unsigned char d = ba.at(++i);
 					code |= (((unsigned)d) & NEXT_CHAR_MASK) << (nbUnicodeChar-j-1)*6;
 				}
