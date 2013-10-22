@@ -17,9 +17,13 @@ namespace libqt4json {
 			void setResult(QVariant result) { this->result=result; }
 			void setLastError(QString lastError) { this->lastError=lastError; }
 			QString getLastError(void) { return lastError; }
+			static QString fromUnicode(QString str);
 		private:
 			QVariant result;
 			QString lastError;
+
+			int getNbUnicodeChar(unsigned char c);
+			QString toUnicode(QString str);
 	};		
 } //namespace
 //------------------------------------------------------------------------------

@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 	int i;
 
 	CJson *json=new CJson();
-	CPerson *parent1=new CPerson("Dad", new CBirthDay(QDate::fromString("07/04/1977", "dd/MM/yyyy")));
+	CPerson *parent1=new CPerson("Dad éé €", new CBirthDay(QDate::fromString("07/04/1977", "dd/MM/yyyy")));
 	CPerson *parent2=new CPerson("Mum", new CBirthDay(QDate::fromString("15/07/1977", "dd/MM/yyyy")));
 	CPerson *child1=new CPerson("Cindy", new CBirthDay(QDate::fromString("01/10/2011", "dd/MM/yyyy")));
 	QVariantMap family;
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
 	
 	QString sJson=indent(json->toString(QVariant(family)));
 	
-	/*cout << QObject::tr("Generated json").toStdString() << ":" << endl;
+	cout << QObject::tr("Generated json").toStdString() << ":" << endl;
 	cout << sJson.toStdString();
 	cout << endl;
 
@@ -48,10 +48,10 @@ int main(int argc, char **argv) {
 	}else {
 		cout << QObject::tr("Generated QVariant").toStdString() << ":" << endl;
 		cout << variantToString(variant).toStdString() << endl;
-	}*/
+	}
 
-	jsonView->setJson(sJson);
-	jsonView->show();
+	/*jsonView->setJson(sJson);
+	jsonView->show();*/
 
 	int ret=app.exec();
 
