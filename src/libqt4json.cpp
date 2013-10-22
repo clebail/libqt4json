@@ -4,6 +4,7 @@
 #include <sstream>
 #include "libqt4json.h"
 #include "CDriver.h"
+#include "CCommon.h"
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
@@ -133,7 +134,7 @@ namespace libqt4json {
 		str=str.replace("\r", "\\\r");
 		str=str.replace("\t", "\\\t");
 		
-		return CDriver::toUnicode(str);
+		return CCommon::toUnicode(str);
 	}
 	//------------------------------------------------------------------------------
 } //namespace

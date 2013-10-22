@@ -3,7 +3,7 @@
 #include <QVariant>
 #include <QtDebug>
 #include "CScanner.h"
-#include "CDriver.h"
+#include "CCommon.h"
 
 typedef libqt4json::CParser::token token;
 
@@ -49,7 +49,7 @@ NULL			[nN][uU][lL]{2}
 			}
 {DBL_QUOTE}{DBL_QUOTE}|{DBL_QUOTE}{CHARS}{DBL_QUOTE} {
 				yytext[strlen(yytext)-1]=0;
-				QVariant *v=new QVariant(CDriver::fromUnicode(yytext+1));
+				QVariant *v=new QVariant(CCommon::fromUnicode(yytext+1));
 				yylval->variant=v;
 				return token::STRING;
 			}

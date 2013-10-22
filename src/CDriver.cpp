@@ -4,14 +4,12 @@
 #include <QtDebug>
 #include "CDriver.h"
 #include "CScanner.h"
-//------------------------------------------------------------------------------
-#define UNICODE_CHAR_MASK			0x80
-#define NEXT_CHAR_MASK				0x3F
+#include "CCommon.h"
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
 	void CDriver::parse(QString json, bool& ok) {
-		std::istringstream iss(toUnicode(json).toStdString());
+		std::istringstream iss(CCommon::toUnicode(json).toStdString());
 		CScanner *scanner=new CScanner(&iss);
 		CParser *parser=new CParser(*scanner, *this);
 		ok=!parser->parse();
@@ -23,52 +21,6 @@ namespace libqt4json {
 		
 		delete parser;
 		delete scanner;
-	}
-	//------------------------------------------------------------------------------
-	QString CDriver::fromUnicode(QString str) {
-		int idx;
-		while((idx = str.indexOf("\\u")) != -1) {
-			int nHex = str.mid(idx+2, 4).toInt(0, 16);
-			str.replace(idx, 6, QChar(nHex));
-		}
-		return str;
-	}
-	//------------------------------------------------------------------------------
-	QString CDriver::toUnicode(QString str) {
-		QByteArray ba = str.toAscii();
-		int i;
-		QString uJson = "";
-
-		for(i=0;i<ba.count();i++) {
-			const unsigned char c=ba.at(i);
-
-			if(c & UNICODE_CHAR_MASK) {
-				unsigned code = 0;
-				int nbUnicodeChar = getNbUnicodeChar(c);
-
-				code |= ((unsigned)c & ((1 << (7-nbUnicodeChar))-1)) << ((nbUnicodeChar-1)*6);  			
-				for(int j=1;j<nbUnicodeChar;j++) {
-					const unsigned char d = ba.at(++i);
-					code |= (((unsigned)d) & NEXT_CHAR_MASK) << (nbUnicodeChar-j-1)*6;
-				}
-
-				uJson.append("\\u"+QString(QByteArray::number(code, 16).rightJustified(4, '0')));
-			}else {
-				uJson.append(c);
-			}
-		}
-
-		return uJson;
-	}
-	//------------------------------------------------------------------------------
-	int CDriver::getNbUnicodeChar(unsigned char c) {
-		int nbChar = 0;
-		while(c & UNICODE_CHAR_MASK) {
-			nbChar++;
-			c <<= 1;
-		}
-
-		return nbChar;
 	}
 	//------------------------------------------------------------------------------
 } //namespace
