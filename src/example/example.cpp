@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QVariant>
 #include <QRegExp>
+#include <QTextCodec>
 #include <iostream>
 #include "CPerson.h"
 #include "CJsonView.h"
@@ -16,6 +17,9 @@ QString variantListToString(QVariantList vl, int level);
 
 int main(int argc, char **argv) {
 	int i;
+
+	QTextCodec::setCodecForTr(QTextCodec::codecForName("utf8"));
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("utf8"));
 
 	CJson *json=new CJson();
 	CPerson *parent1=new CPerson("Dad éé €", new CBirthDay(QDate::fromString("07/04/1977", "dd/MM/yyyy")));
