@@ -1,4 +1,4 @@
-bin_PROGRAMS = example
+bin_PROGRAMS = example bench
 
 AM_CPPFLAGS = $(QT4_CFLAGS) -I..  -DDATADIR='"$(datarootdir)"'
 
@@ -11,10 +11,12 @@ example_SOURCES =	example.cpp \
 					CJsonView.cpp \
 					CJsonView.h
 
-			
+bench_SOURCES = benchParser.cpp
+
 nodist_example_SOURCES =	moc_CPerson.cpp
 			
 example_LDADD = $(QT4_LIBS) -L../.libs -lqt4json
+bench_LDADD = $(QT4_LIBS) -L../.libs -lqt4json
 
 exampledir = $(datarootdir)/@PACKAGE@
 
@@ -31,5 +33,4 @@ clean-am: clean-qt-extra
 
 install-data-hook:
 	
-
 dist-hook:
