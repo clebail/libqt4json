@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
 	QFile file("testBig.json");
 	if(file.open(QIODevice::ReadOnly)) {
 		QTextStream in(&file);
+		in.setCodec("UTF-8");
 	
 		while(!in.atEnd()) {
 			QString line = in.readLine();
@@ -34,6 +35,7 @@ int main(int argc, char **argv) {
 
 		file.close();
 	}
+	
 	qDebug() << QDateTime::currentDateTime();
 
 	QVariant variant=json->fromString(sJson, ok);

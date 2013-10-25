@@ -80,9 +80,10 @@ namespace libqt4json {
 		struct json_tokener *tok = json_tokener_new();
 		enum json_tokener_error jerr;
 		QVariant ret;
+		QString uJson = CCommon::toUnicode(json);
 
 		do {
-			jObj = json_tokener_parse_ex(tok, CCommon::toUnicode(json).toAscii().data(), json.size());
+			jObj = json_tokener_parse_ex(tok, uJson.toAscii().data(), uJson.size());
 		}while((jerr = json_tokener_get_error(tok)) == json_tokener_continue);
 
 		if(jerr != json_tokener_success) {

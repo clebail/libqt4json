@@ -4,6 +4,9 @@
 #include <QRegExp>
 #include <QTextCodec>
 #include <iostream>
+#include <QFile>
+#include <QTextStream>
+#include <QtDebug>
 #include "CPerson.h"
 #include "CJsonView.h"
 
@@ -45,7 +48,7 @@ int main(int argc, char **argv) {
 	cout << QObject::tr("Generated json").toStdString() << ":" << endl;
 	cout << sJson.toStdString();
 	cout << endl;
-
+	
 	QVariant variant=json->fromString(sJson, ok);
 	if(!ok) {
 		cout << json->getLastError().toStdString() << endl;
