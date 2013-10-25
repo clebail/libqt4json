@@ -2,33 +2,98 @@
 #include <QMetaProperty>
 #include <QtDebug>
 #include <sstream>
+#include <json.h>
 #include "libqt4json.h"
-#include "CDriver.h"
 #include "CCommon.h"
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
+	static QVariant jsonParse(json_object *jObj);
+	//------------------------------------------------------------------------------
+    static QVariant jsonParseObject(json_object *jObj) {
+        QVariantMap map;
+
+		struct json_object_iterator it;
+        struct json_object_iterator itEnd;
+
+        it = json_object_iter_begin(jObj);
+        itEnd = json_object_iter_end(jObj);
+
+        while(!json_object_iter_equal(&it, &itEnd)) {
+			QString key = QString(json_object_iter_peek_name(&it));
+
+			map.insert(key, jsonParse(json_object_iter_peek_value(&it)));
+
+            json_object_iter_next(&it);
+        }
+
+        return map;
+    }
+    //------------------------------------------------------------------------------
+    static QVariant jsonParseArray(json_object *jObj) {
+		QVariantList list;
+		struct array_list *aList = json_object_get_array(jObj);
+		int len = json_object_array_length(jObj);
+		int i;
+
+		for(i=0;i<len;i++) {
+			json_object *val = json_object_array_get_idx(jObj, i);
+
+			list.append(jsonParse(val));
+		}
+
+        return list;
+    }
+	//------------------------------------------------------------------------------
+	static QVariant jsonParse(json_object *jObj) {
+		switch(json_object_get_type(jObj)) {
+			case json_type_null:
+				return QVariant(QVariant::Invalid);
+			case json_type_boolean:
+				return QVariant((bool)json_object_get_boolean(jObj));
+			case json_type_double:
+				return QVariant(json_object_get_double(jObj));
+			case json_type_int:
+				return QVariant(json_object_get_int(jObj));
+			case json_type_object:
+				return jsonParseObject(jObj);
+			case json_type_array:
+				return jsonParseArray(jObj);;
+			case json_type_string:
+				return QVariant(CCommon::fromUnicode(QString(json_object_get_string(jObj))));
+		}
+	}
+	//------------------------------------------------------------------------------
 	QString CJson::toString(QVariant variant) {
 		bool simpleType;
 		QString json=variantToString(variant, simpleType);
+		
 		if(simpleType) {
 			json="["+json+"]";
 		}
+		
 		return json;
 	}
 	//------------------------------------------------------------------------------
 	QVariant CJson::fromString(QString json, bool& ok) {
-		CDriver *driver=new CDriver();
+		struct json_object *jObj = 0;
+		struct json_tokener *tok = json_tokener_new();
+		enum json_tokener_error jerr;
 		QVariant ret;
 
-		driver->parse(json, ok);
-		if(ok) {
-			ret=driver->getResult();
+		do {
+			jObj = json_tokener_parse_ex(tok, CCommon::toUnicode(json).toAscii().data(), json.size());
+		}while((jerr = json_tokener_get_error(tok)) == json_tokener_continue);
+
+		if(jerr != json_tokener_success) {
+			lastError = QString(json_tokener_error_desc(jerr));
+			ok = false;
+		}else {
+			ret = jsonParse(jObj);
+			ok = true;
 		}
 
-		lastError=driver->getLastError();
-
-		delete driver;
+		json_tokener_free(tok);
 
 		return ret;
 	}

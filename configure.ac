@@ -1,4 +1,4 @@
-AC_INIT([libqt4json], [1.0.0-beta2], [corentin.lebail@gmail.com],,[https://sourceforge.net/projects/libqt4json/]) 
+AC_INIT([libqt4json], [1.0.0-beta2-json-c], [corentin.lebail@gmail.com],,[https://sourceforge.net/projects/libqt4json/]) 
 
 LT_INIT
 LT_LANG([C++])
@@ -32,16 +32,7 @@ if test MOC = x; then
 	fi
 fi
 
-AC_CHECK_PROG(FLEX, flex, flex)
-if test x$FLEX = x ; then
-	AC_MSG_ERROR([flex not found! Make sure you have flex installed!])
-fi
-
-AC_CHECK_PROG(BISON, bison, bison)
-if test x$BISON = x ; then
-	AC_MSG_ERROR([bison not found! Make sure you have bison installed!])
-fi
-
 PKG_CHECK_MODULES([QT4], [QtCore QtGui])
+PKG_CHECK_MODULES([LIBJSON], [json-c])
 
 AC_OUTPUT

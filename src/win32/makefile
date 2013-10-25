@@ -7,13 +7,11 @@ LIBNAME = build/libqt4json
 ALL=$(LIBNAME).dll
 CFLAGS = -Wall -I. -I.. -I../.. -I/include -DQT_SHARED -I$(QT_INC_PATH) -I$(QT_INC_PATH)/QtCore
 LDFLAGS = -Wl -Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -enable-stdcall-fixup -Wl,-s -shared -Wl,--out-implib,$(LIBNAME).a -mwindows
-LIBS =  -L$(QT_LIB_PATH) -lQtCore4 -lpthread -lws2_32
+LIBS =  -L$(QT_LIB_PATH) -lQtCore4 -lpthread -lws2_32 -ljson-c
 BUILD_DIR = build
 
 SRC = 	libqt4json.cpp \
-		CDriver.cpp \
-		libqt4json.y.cpp \
-		libqt4json.l.cpp
+		CCommon.cpp
 	
 
 OBJ = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(SRC)) 

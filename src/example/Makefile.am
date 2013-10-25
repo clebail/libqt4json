@@ -15,7 +15,7 @@ bench_SOURCES = benchParser.cpp
 
 nodist_example_SOURCES =	moc_CPerson.cpp
 			
-example_LDADD = $(QT4_LIBS) -L../.libs -lqt4json
+example_LDADD = $(QT4_LIBS) $(LIBJSON_LIBS) -L../.libs -lqt4json
 bench_LDADD = $(QT4_LIBS) -L../.libs -lqt4json
 
 exampledir = $(datarootdir)/@PACKAGE@
