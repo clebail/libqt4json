@@ -94,6 +94,7 @@ namespace libqt4json {
 			ok = true;
 		}
 
+	 	json_object_put(jObj);
 		json_tokener_free(tok);
 
 		return ret;

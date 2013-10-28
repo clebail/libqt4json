@@ -1,4 +1,4 @@
-bin_PROGRAMS = example bench
+bin_PROGRAMS = example bench leak
 
 AM_CPPFLAGS = $(QT4_CFLAGS) -I..  -DDATADIR='"$(datarootdir)"'
 
@@ -13,10 +13,15 @@ example_SOURCES =	example.cpp \
 
 bench_SOURCES = benchParser.cpp
 
+leak_SOURCES = leak.cpp
+
 nodist_example_SOURCES =	moc_CPerson.cpp
 			
 example_LDADD = $(QT4_LIBS) $(LIBJSON_LIBS) -L../.libs -lqt4json
+
 bench_LDADD = $(QT4_LIBS) -L../.libs -lqt4json
+
+leak_LDADD = $(QT4_LIBS) -L../.libs -lqt4json
 
 exampledir = $(datarootdir)/@PACKAGE@
 
