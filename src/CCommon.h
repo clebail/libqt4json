@@ -9,7 +9,7 @@ namespace libqt4json {
 	class CCommon {
 		public:
 			static QString fromUnicode(QString str);
-			static QString toUnicode(QString str);
+			static QString toUnicode(QString str, bool &ok);
 		private:
 			static int getNbUnicodeChar(unsigned char c);
 	};		

@@ -5,6 +5,10 @@
 //------------------------------------------------------------------------------
 #define UNICODE_CHAR_MASK			0x80
 #define NEXT_CHAR_MASK				0x3F
+#define START_PLAGE_CONTINUATION	0x80
+#define END_PLAGE_CONTINUATION		0xBF
+#define BAD_START_SEQUENCE_0		0xC0
+#define BAD_START_SEQUENCE_1		0xC1
 //------------------------------------------------------------------------------
 namespace libqt4json {
 	//------------------------------------------------------------------------------
@@ -17,22 +21,36 @@ namespace libqt4json {
 		return str;
 	}
 	//------------------------------------------------------------------------------
-	QString CCommon::toUnicode(QString str) {
+	QString CCommon::toUnicode(QString str, bool &ok) {
 		QByteArray ba = str.toAscii();
 		int i;
 		QString uJson = "";
-
+		
+		ok = true;
+	
+		//TODO valid UTF-8	
 		for(i=0;i<ba.count();i++) {
 			const unsigned char c=ba.at(i);
 
 			if(c & UNICODE_CHAR_MASK) {
+				if(c == BAD_START_SEQUENCE_0 || c == BAD_START_SEQUENCE_1) {
+					ok = false;
+
+					return str;
+				}
+
 				unsigned code = 0;
 				int nbUnicodeChar = getNbUnicodeChar(c);
-				//TODO Verif UTF 8 valid sequence (http://fr.wikipedia.org/wiki/UTF-8)
+
 				code |= ((unsigned)c & ((1 << (7-nbUnicodeChar))-1)) << ((nbUnicodeChar-1)*6);  			
 				for(int j=1;j<nbUnicodeChar;j++) {
-					//TODO c id valid (c >= 0x80 && c <= 0xBF)
 					const unsigned char d = ba.at(++i);
+
+					if(d < START_PLAGE_CONTINUATION || d > END_PLAGE_CONTINUATION) {
+						ok = false;
+
+						return str;
+					}
 					code |= (((unsigned)d) & NEXT_CHAR_MASK) << (nbUnicodeChar-j-1)*6;
 				}
 

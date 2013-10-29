@@ -80,7 +80,13 @@ namespace libqt4json {
 		struct json_tokener *tok = json_tokener_new();
 		enum json_tokener_error jerr;
 		QVariant ret;
-		QString uJson = CCommon::toUnicode(json);
+		QString uJson = CCommon::toUnicode(json, ok);
+
+		if(!ok) {
+			lastError = "Invalid TUF-8 segment";
+
+			return ret;
+		}
 
 		do {
 			jObj = json_tokener_parse_ex(tok, uJson.toAscii().data(), uJson.size());
@@ -192,6 +198,8 @@ namespace libqt4json {
 	}
 	//------------------------------------------------------------------------------
 	QString CJson::protect(QString str) {
+		bool ok;
+
 		str=str.replace("\"", "\\\"");
 		str=str.replace("\\", "\\\\");
 		str=str.replace("/", "\\/");
@@ -201,7 +209,7 @@ namespace libqt4json {
 		str=str.replace("\r", "\\\r");
 		str=str.replace("\t", "\\\t");
 		
-		return CCommon::toUnicode(str);
+		return CCommon::toUnicode(str, ok);
 	}
 	//------------------------------------------------------------------------------
 } //namespace
